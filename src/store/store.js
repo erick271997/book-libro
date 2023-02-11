@@ -1,0 +1,57 @@
+/* eslint-disable import/no-anonymous-default-export */
+import React from "react";
+import { createContext,useState,useContext  ,useEffect   } from "react";
+
+const AppContext= createContext({
+    items: [],
+  createItem: (item) => {},
+  getItem: (id) => {},
+  updateItem: (item) => {},
+});
+
+export default function Store({children}){
+    const [items, SetItems]= useState([]);
+    
+    function createItem (item){
+        const temp = [...items];
+        temp.push(item);
+
+        SetItems(temp);
+    }
+
+    function getItem(id) {
+        const item = items.find((item) => item.id === id);
+    
+        return item;
+      }
+
+      function updateItem(item){
+        const index = items.findIndex((i) => i.id === item.id);
+
+        const temp = [...items];
+    
+        temp[index] = { ...item };
+    
+        return true;
+      }
+    
+return(
+    <AppContext.Provider 
+    value={{
+        items,
+        createItem,
+        getItem,
+        updateItem,
+    }}>
+        {children}
+    </AppContext.Provider >
+)
+ 
+}
+
+export function useAppContext(){
+    return useContext(AppContext)
+        
+        
+  }
+
